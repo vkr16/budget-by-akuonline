@@ -2,104 +2,187 @@
 <html lang="id" class="h-full">
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>{{ $title ?? 'Dashboard' }} - {{ config('app.name', 'Budget') }}</title>
 
+    <!-- Google Fonts: Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
+    <!-- Local Vendor Assets: Font Awesome Pro & Notiflix AIO -->
+    <link rel="stylesheet" href="{{ asset('assets/vendor/fontawesome/css/all.css') }}">
+    <script src="{{ asset('assets/vendor/notiflix/notiflix.min.js') }}"></script>
+
+    <!-- Progressive Web App Meta -->
+    <x-pwa-meta />
+
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
-<body class="h-full bg-zinc-100/70 text-zinc-900 font-sans antialiased selection:bg-zinc-900 selection:text-white">
+<body class="h-full bg-[#F8FAFC] text-[#1F2937] font-sans antialiased selection:bg-[#312E81] selection:text-white">
     <div class="min-h-full flex flex-col">
-        <!-- Top Navigation -->
-        <nav class="sticky top-0 z-30 bg-white/95 backdrop-blur-xs border-b border-zinc-200">
+        <!-- PWA Install Banner -->
+        <x-pwa-install-banner />
+
+        <!-- Top Navigation (Desktop & Mobile Header) -->
+        <nav class="glass-header sticky top-0 z-30 bg-white/95 backdrop-blur-md border-b border-zinc-200/90">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
-                <div class="flex items-center justify-between h-16">
+                <div class="flex items-center justify-between h-16 sm:h-17">
                     <!-- Brand & Left Navigation Links -->
-                    <div class="flex items-center gap-8">
-                        <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 text-zinc-900 font-semibold tracking-tight text-base hover:opacity-90 transition">
-                            <span class="w-8 h-8 rounded-lg bg-zinc-900 text-white flex items-center justify-center text-sm shadow-xs">
-                                <i class="fa-solid fa-wallet"></i>
+                    <div class="flex items-center gap-6 sm:gap-8">
+                        <a href="{{ route('dashboard') }}" class="flex items-center gap-2.5 text-slate-900 font-bold tracking-tight text-base group cursor-pointer">
+                            <span class="w-9 h-9 rounded-xl bg-[#312E81] text-white flex items-center justify-center text-sm shadow-xs transition-transform group-hover:scale-105">
+                                <i class="fa-regular xx fa-wallet text-[#C7D2FE]"></i>
                             </span>
-                            <span>Budget<span class="text-zinc-500 font-normal">Tracker</span></span>
+                            <span class="leading-tight font-bold">
+                                Budget <span class="text-[#312E81] font-semibold text-xs px-2 py-0.5 rounded-full bg-[#EEF2FF]">by AkuOnline</span>
+                            </span>
                         </a>
 
-                        <div class="hidden sm:flex items-center space-x-1">
-                            <a href="{{ route('dashboard') }}" 
-                               class="px-3 py-1.5 rounded-md text-sm font-medium transition {{ request()->routeIs('dashboard') ? 'bg-zinc-100 text-zinc-900' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50' }}">
-                                <i class="fa-solid fa-gauge text-xs mr-1.5 opacity-70"></i> Dashboard
+                        <!-- Desktop Horizontal Navigation Links -->
+                        <div class="hidden sm:flex items-center space-x-1.5">
+                            <a href="{{ route('dashboard') }}"
+                               class="px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center cursor-pointer {{ request()->routeIs('dashboard') ? 'bg-[#EEF2FF] text-[#312E81]' : 'text-slate-600 hover:text-[#312E81] hover:bg-[#EEF2FF]' }}">
+                                <i class="fa-regular xx fa-gauge text-xs mr-1.5 opacity-80"></i> Dashboard
                             </a>
-                            <a href="{{ route('pockets.index') }}" 
-                               class="px-3 py-1.5 rounded-md text-sm font-medium transition {{ request()->routeIs('pockets.*') ? 'bg-zinc-100 text-zinc-900' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50' }}">
-                                <i class="fa-solid fa-boxes-stacked text-xs mr-1.5 opacity-70"></i> Kantong
+                            <a href="{{ route('pockets.index') }}"
+                               class="px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center cursor-pointer {{ request()->routeIs('pockets.*') ? 'bg-[#EEF2FF] text-[#312E81]' : 'text-slate-600 hover:text-[#312E81] hover:bg-[#EEF2FF]' }}">
+                                <i class="fa-regular xx fa-boxes-stacked text-xs mr-1.5 opacity-80"></i> Kantong
                             </a>
-                            <a href="{{ route('transactions.index') }}" 
-                               class="px-3 py-1.5 rounded-md text-sm font-medium transition {{ request()->routeIs('transactions.*') ? 'bg-zinc-100 text-zinc-900' : 'text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50' }}">
-                                <i class="fa-solid fa-list-check text-xs mr-1.5 opacity-70"></i> Riwayat Transaksi
+                            <a href="{{ route('transactions.index') }}"
+                               class="px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center cursor-pointer {{ request()->routeIs('transactions.*') ? 'bg-[#EEF2FF] text-[#312E81]' : 'text-slate-600 hover:text-[#312E81] hover:bg-[#EEF2FF]' }}">
+                                <i class="fa-regular xx fa-list-check text-xs mr-1.5 opacity-80"></i> Riwayat Transaksi
                             </a>
                         </div>
                     </div>
 
                     <!-- Right Navigation / User & Action -->
-                    <div class="flex items-center gap-3">
-                        <button type="button" 
-                                onclick="document.getElementById('quick-transaction-modal')?.classList.remove('hidden')" 
-                                class="hidden md:inline-flex items-center gap-1.5 px-3 py-1.5 rounded-md bg-zinc-900 text-white text-xs font-medium hover:bg-zinc-800 transition shadow-xs">
-                            <i class="fa-solid fa-plus text-[11px]"></i> Catat Transaksi
+                    <div class="flex items-center gap-2.5 sm:gap-3">
+                        <button type="button"
+                                onclick="window.installPwa()"
+                                class="pwa-install-btn hidden items-center gap-1.5 px-3 py-2 rounded-xl btn-secondary text-xs font-bold shadow-2xs cursor-pointer touch-press"
+                                title="Pasang Aplikasi di Perangkat">
+                            <i class="fa-regular xx fa-download text-[11px] text-[#312E81]"></i>
+                            <span class="hidden md:inline">Install App</span>
                         </button>
 
-                        <div class="flex items-center pl-2 border-l border-zinc-200 gap-3">
+                        <button type="button"
+                                onclick="document.getElementById('quick-transaction-modal')?.classList.remove('hidden')"
+                                class="hidden sm:inline-flex items-center gap-1.5 px-3.5 py-2 rounded-xl btn-primary text-xs font-bold shadow-xs cursor-pointer touch-press">
+                            <i class="fa-regular xx fa-plus text-[11px]"></i>
+                            <span>Catat Transaksi</span>
+                        </button>
+
+                        <div class="flex items-center pl-2 border-l border-slate-200 gap-2.5 sm:gap-3">
                             <div class="text-right hidden sm:block">
-                                <p class="text-xs font-semibold text-zinc-900 leading-tight">{{ Auth::user()->name }}</p>
-                                <p class="text-[11px] text-zinc-500 leading-tight">{{ Auth::user()->email }}</p>
+                                <p class="text-xs font-bold text-slate-900 leading-tight">{{ Auth::user()->name }}</p>
+                                <p class="text-[11px] text-slate-500 leading-tight">{{ Auth::user()->email }}</p>
                             </div>
 
                             <form method="POST" action="{{ route('logout') }}">
                                 @csrf
-                                <button type="submit" 
-                                        title="Keluar" 
-                                        data-confirm="Apakah Anda yakin ingin keluar dari akun?" 
+                                <button type="submit"
+                                        title="Keluar"
+                                        data-confirm="Apakah Anda yakin ingin keluar dari akun?"
                                         data-confirm-title="Keluar Akun"
-                                        class="w-8 h-8 rounded-md border border-zinc-200 bg-white text-zinc-600 hover:text-zinc-900 hover:bg-zinc-50 flex items-center justify-center text-xs transition">
-                                    <i class="fa-solid fa-arrow-right-from-bracket"></i>
+                                        class="w-9 h-9 rounded-xl border border-zinc-200 bg-white text-zinc-600 hover:text-rose-600 hover:border-rose-200 hover:bg-rose-50 flex items-center justify-center text-xs transition cursor-pointer touch-press shadow-2xs">
+                                    <i class="fa-regular xx fa-arrow-right-from-bracket"></i>
                                 </button>
                             </form>
                         </div>
                     </div>
                 </div>
-
-                <!-- Mobile Navigation Bar -->
-                <div class="sm:hidden flex items-center justify-around py-2 border-t border-zinc-100 text-xs">
-                    <a href="{{ route('dashboard') }}" class="px-2 py-1 rounded {{ request()->routeIs('dashboard') ? 'font-semibold text-zinc-900' : 'text-zinc-600' }}">
-                        <i class="fa-solid fa-gauge mr-1"></i> Dashboard
-                    </a>
-                    <a href="{{ route('pockets.index') }}" class="px-2 py-1 rounded {{ request()->routeIs('pockets.*') ? 'font-semibold text-zinc-900' : 'text-zinc-600' }}">
-                        <i class="fa-solid fa-boxes-stacked mr-1"></i> Kantong
-                    </a>
-                    <a href="{{ route('transactions.index') }}" class="px-2 py-1 rounded {{ request()->routeIs('transactions.*') ? 'font-semibold text-zinc-900' : 'text-zinc-600' }}">
-                        <i class="fa-solid fa-list mr-1"></i> Riwayat
-                    </a>
-                </div>
             </div>
         </nav>
 
-        <!-- Main Content Area -->
-        <main class="flex-1 py-8">
+        <!-- Main Content Area with Bottom Padding for Mobile Nav -->
+        <main class="flex-1 py-6 sm:py-8 pb-32 sm:pb-8">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
                 {{ $slot }}
             </div>
         </main>
 
-        <!-- Footer -->
-        <footer class="mt-auto py-6 border-t border-zinc-200/80 bg-white/50 text-xs text-zinc-500">
+        <!-- STICKY MOBILE BOTTOM NAVIGATION BAR (THUMB ZONE) -->
+        <nav class="sm:hidden bottom-nav-mobile px-4 flex items-center justify-around select-none">
+            <!-- Tab 1: Dashboard -->
+            <a href="{{ route('dashboard') }}" class="flex flex-col items-center gap-1 text-[10.5px] transition cursor-pointer touch-press {{ request()->routeIs('dashboard') ? 'text-[#312E81] font-bold' : 'text-zinc-500 hover:text-zinc-800 font-medium' }}">
+                <div class="w-8 h-8 rounded-xl flex items-center justify-center text-xs {{ request()->routeIs('dashboard') ? 'bg-[#EEF2FF]' : '' }}">
+                    <i class="fa-regular xx fa-gauge"></i>
+                </div>
+                <span class="tracking-tight">Beranda</span>
+            </a>
+
+            <!-- Tab 2: Kantong -->
+            <a href="{{ route('pockets.index') }}" class="flex flex-col items-center gap-1 text-[10.5px] transition cursor-pointer touch-press {{ request()->routeIs('pockets.*') ? 'text-[#312E81] font-bold' : 'text-zinc-500 hover:text-zinc-800 font-medium' }}">
+                <div class="w-8 h-8 rounded-xl flex items-center justify-center text-xs {{ request()->routeIs('pockets.*') ? 'bg-[#EEF2FF]' : '' }}">
+                    <i class="fa-regular xx fa-boxes-stacked"></i>
+                </div>
+                <span class="tracking-tight">Kantong</span>
+            </a>
+
+            <!-- Center Floating Thumb Action: Catat Cepat (+) -->
+            <div class="-mt-7">
+                <button type="button"
+                        onclick="document.getElementById('quick-transaction-modal')?.classList.remove('hidden')"
+                        class="touch-target w-12 h-12 rounded-2xl btn-primary text-white shadow-lg shadow-indigo-900/25 flex items-center justify-center text-base hover:scale-105 transition-all touch-press cursor-pointer"
+                        title="Catat Cepat">
+                    <i class="fa-regular xx fa-plus text-sm"></i>
+                </button>
+            </div>
+
+            <!-- Tab 3: Riwayat Transaksi -->
+            <a href="{{ route('transactions.index') }}" class="flex flex-col items-center gap-1 text-[10.5px] transition cursor-pointer touch-press {{ request()->routeIs('transactions.*') ? 'text-[#312E81] font-bold' : 'text-zinc-500 hover:text-zinc-800 font-medium' }}">
+                <div class="w-8 h-8 rounded-xl flex items-center justify-center text-xs {{ request()->routeIs('transactions.*') ? 'bg-[#EEF2FF]' : '' }}">
+                    <i class="fa-regular xx fa-receipt"></i>
+                </div>
+                <span class="tracking-tight">Riwayat</span>
+            </a>
+
+            <!-- Tab 4: Keluar Akun -->
+            <form method="POST" action="{{ route('logout') }}" class="inline-flex">
+                @csrf
+                <button type="submit"
+                        data-confirm="Apakah Anda yakin ingin keluar dari akun?"
+                        data-confirm-title="Keluar Akun"
+                        class="flex flex-col items-center gap-1 text-[10.5px] text-zinc-500 hover:text-rose-600 font-medium transition cursor-pointer touch-press">
+                    <div class="w-8 h-8 rounded-xl flex items-center justify-center text-xs">
+                        <i class="fa-regular xx fa-arrow-right-from-bracket"></i>
+                    </div>
+                    <span class="tracking-tight">Keluar</span>
+                </button>
+            </form>
+        </nav>
+
+        <!-- Footer (Hidden on Mobile to keep bottom clean, visible on desktop) -->
+        <footer class="mt-auto hidden sm:block py-6 border-t border-zinc-200/80 bg-white/70 text-xs text-zinc-500">
             <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 flex flex-col sm:flex-row items-center justify-between gap-2">
-                <p>Budget & Expense Tracker — Simpel & Anti Ribet</p>
-                <p class="text-zinc-400">Pockets Money Management</p>
+                <div class="flex items-center gap-2">
+                    <span class="w-5 h-5 rounded-md bg-[#312E81] text-white flex items-center justify-center text-[10px]">
+                        <i class="fa-regular xx fa-wallet text-[#C7D2FE]"></i>
+                    </span>
+                    <span class="font-bold text-zinc-800">Budget by AkuOnline</span>
+                    <span>&bull;</span>
+                    <span>Sistem Pengelolaan Anggaran & Kantong</span>
+                </div>
+                <div class="text-zinc-400">
+                    &copy; {{ date('Y') }} AkuOnline. All rights reserved.
+                </div>
             </div>
         </footer>
     </div>
 
     <!-- Quick Modal Transaction Form (Accessible from Anywhere) -->
     @include('components.quick-transaction-modal')
+
+    <!-- PWA Shortcut Action Handler -->
+    @if(request('action') === 'quick_transaction')
+        <script>
+            document.addEventListener('DOMContentLoaded', () => {
+                document.getElementById('quick-transaction-modal')?.classList.remove('hidden');
+            });
+        </script>
+    @endif
 
     <!-- Flash Messages Handler via Notiflix -->
     @if(session('success'))

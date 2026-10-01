@@ -1,71 +1,75 @@
-import Notiflix from 'notiflix';
+// Initialize local Notiflix AIO with Tailwind Indigo-900 Theme
+function initNotiflixConfig() {
+    const Notiflix = window.Notiflix;
+    if (!Notiflix) return;
 
-// Soft-neutral Notiflix configuration matching the clean UI
-Notiflix.Notify.init({
-    width: '320px',
-    position: 'right-top',
-    distance: '16px',
-    opacity: 1,
-    borderRadius: '8px',
-    timeout: 3500,
-    messageMaxLength: 200,
-    backOverlay: false,
-    plainText: true,
-    showOnlyTheLastOne: false,
-    fontFamily: 'Instrument Sans, ui-sans-serif, system-ui, sans-serif',
-    fontSize: '13px',
-    cssAnimation: true,
-    cssAnimationDuration: 250,
-    cssAnimationStyle: 'fade',
-    success: {
-        background: '#047857',
-        textColor: '#ffffff',
-        childClassName: 'notiflix-notify-success',
-        notiflixIconColor: 'rgba(255,255,255,0.9)',
-    },
-    failure: {
-        background: '#be123c',
-        textColor: '#ffffff',
-        childClassName: 'notiflix-notify-failure',
-        notiflixIconColor: 'rgba(255,255,255,0.9)',
-    },
-    warning: {
-        background: '#b45309',
-        textColor: '#ffffff',
-        childClassName: 'notiflix-notify-warning',
-        notiflixIconColor: 'rgba(255,255,255,0.9)',
-    },
-    info: {
-        background: '#27272a',
-        textColor: '#ffffff',
-        childClassName: 'notiflix-notify-info',
-        notiflixIconColor: 'rgba(255,255,255,0.9)',
-    },
-});
+    Notiflix.Notify.init({
+        width: '320px',
+        position: 'right-top',
+        distance: '16px',
+        opacity: 1,
+        borderRadius: '10px',
+        timeout: 3500,
+        messageMaxLength: 200,
+        backOverlay: false,
+        plainText: true,
+        showOnlyTheLastOne: false,
+        fontFamily: 'Plus Jakarta Sans, Instrument Sans, ui-sans-serif, system-ui, sans-serif',
+        fontSize: '13px',
+        cssAnimation: true,
+        cssAnimationDuration: 250,
+        cssAnimationStyle: 'fade',
+        success: {
+            background: '#312E81',
+            textColor: '#ffffff',
+            childClassName: 'notiflix-notify-success',
+            notiflixIconColor: '#C7D2FE',
+        },
+        failure: {
+            background: '#DC2626',
+            textColor: '#ffffff',
+            childClassName: 'notiflix-notify-failure',
+            notiflixIconColor: '#ffffff',
+        },
+        warning: {
+            background: '#D97706',
+            textColor: '#ffffff',
+            childClassName: 'notiflix-notify-warning',
+            notiflixIconColor: '#ffffff',
+        },
+        info: {
+            background: '#1F2937',
+            textColor: '#ffffff',
+            childClassName: 'notiflix-notify-info',
+            notiflixIconColor: '#ffffff',
+        },
+    });
 
-Notiflix.Confirm.init({
-    className: 'notiflix-confirm',
-    width: '360px',
-    zindex: 4003,
-    position: 'center',
-    distance: '10px',
-    backgroundColor: '#ffffff',
-    borderRadius: '8px',
-    backOverlay: true,
-    backOverlayColor: 'rgba(15, 23, 42, 0.45)',
-    fontFamily: 'Instrument Sans, ui-sans-serif, system-ui, sans-serif',
-    titleColor: '#18181b',
-    titleFontSize: '16px',
-    messageColor: '#52525b',
-    messageFontSize: '13.5px',
-    buttonsFontSize: '13px',
-    okButtonColor: '#ffffff',
-    okButtonBackground: '#be123c',
-    cancelButtonColor: '#18181b',
-    cancelButtonBackground: '#f4f4f5',
-});
+    Notiflix.Confirm.init({
+        className: 'notiflix-confirm',
+        width: '360px',
+        zindex: 4003,
+        position: 'center',
+        distance: '10px',
+        backgroundColor: '#ffffff',
+        borderRadius: '16px',
+        backOverlay: true,
+        backOverlayColor: 'rgba(49, 46, 129, 0.35)',
+        fontFamily: 'Plus Jakarta Sans, Instrument Sans, ui-sans-serif, system-ui, sans-serif',
+        titleColor: '#312E81',
+        titleFontSize: '16px',
+        messageColor: '#4B5563',
+        messageFontSize: '13.5px',
+        buttonsFontSize: '13px',
+        okButtonColor: '#ffffff',
+        okButtonBackground: '#312E81',
+        cancelButtonColor: '#1F2937',
+        cancelButtonBackground: '#EEF2FF',
+    });
+}
 
-window.Notiflix = Notiflix;
+// Run config on load
+initNotiflixConfig();
 
 // Helper: Format Rupiah numbers for display
 export function formatRupiah(number) {
@@ -135,24 +139,32 @@ function setupConfirmActions() {
         const okText = trigger.getAttribute('data-confirm-ok') || 'Ya, Lanjutkan';
         const cancelText = trigger.getAttribute('data-confirm-cancel') || 'Batal';
 
-        Notiflix.Confirm.show(
-            title,
-            message,
-            okText,
-            cancelText,
-            () => {
-                if (trigger.tagName === 'A') {
-                    window.location.href = trigger.href;
-                } else if (trigger.tagName === 'BUTTON' && trigger.type === 'submit') {
-                    trigger.closest('form').submit();
-                } else if (trigger.closest('form')) {
-                    trigger.closest('form').submit();
+        if (window.Notiflix?.Confirm) {
+            window.Notiflix.Confirm.show(
+                title,
+                message,
+                okText,
+                cancelText,
+                () => {
+                    if (trigger.tagName === 'A') {
+                        window.location.href = trigger.href;
+                    } else if (trigger.tagName === 'BUTTON' && trigger.type === 'submit') {
+                        trigger.closest('form').submit();
+                    } else if (trigger.closest('form')) {
+                        trigger.closest('form').submit();
+                    }
+                },
+                () => {
+                    // Cancelled - do nothing
                 }
-            },
-            () => {
-                // Cancelled - do nothing
+            );
+        } else if (confirm(message)) {
+            if (trigger.tagName === 'A') {
+                window.location.href = trigger.href;
+            } else if (trigger.closest('form')) {
+                trigger.closest('form').submit();
             }
-        );
+        }
     });
 }
 
@@ -181,8 +193,13 @@ function setupPresetAmountButtons() {
 
 // Run initializers on DOMContentLoaded
 document.addEventListener('DOMContentLoaded', () => {
+    initNotiflixConfig();
     setupCurrencyInputs();
     setupDateTimeDefaults();
     setupConfirmActions();
     setupPresetAmountButtons();
 });
+
+// Import Progressive Web App (PWA) client handler
+import './pwa.js';
+

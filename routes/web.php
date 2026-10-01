@@ -6,6 +6,32 @@ use App\Http\Controllers\PocketController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
+// Public Design Guide System
+Route::get('/design-guide', function () {
+    return view('design-guide');
+})->name('design-guide');
+
+// PWA Assets Routes (Ensures proper MIME types & headers across all web servers)
+Route::get('/manifest.webmanifest', function () {
+    return response(file_get_contents(public_path('manifest.webmanifest')), 200, [
+        'Content-Type' => 'application/manifest+json',
+        'Cache-Control' => 'no-cache, must-revalidate',
+    ]);
+});
+Route::get('/manifest.json', function () {
+    return response(file_get_contents(public_path('manifest.json')), 200, [
+        'Content-Type' => 'application/manifest+json',
+        'Cache-Control' => 'no-cache, must-revalidate',
+    ]);
+});
+Route::get('/sw.js', function () {
+    return response(file_get_contents(public_path('sw.js')), 200, [
+        'Content-Type' => 'application/javascript',
+        'Service-Worker-Allowed' => '/',
+        'Cache-Control' => 'no-cache, no-store, must-revalidate',
+    ]);
+});
+
 // Guest Routes
 Route::middleware('guest')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');

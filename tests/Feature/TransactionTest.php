@@ -170,4 +170,54 @@ class TransactionTest extends TestCase
         $response->assertSee('Transfer Masuk A');
         $response->assertDontSee('Beli Martabak B');
     }
+
+    public function test_transactions_can_be_filtered_by_search_description(): void
+    {
+        $user = User::factory()->create();
+        $pocket = Pocket::factory()->create(['user_id' => $user->id]);
+
+        Transaction::factory()->create([
+            'user_id' => $user->id,
+            'pocket_id' => $pocket->id,
+            'type' => 'out',
+            'description' => 'Kopi Susu Gula Aren Spesial',
+        ]);
+        Transaction::factory()->create([
+            'user_id' => $user->id,
+            'pocket_id' => $pocket->id,
+            'type' => 'out',
+            'description' => 'Makan Bakso Solo',
+        ]);
+
+        $response = $this->actingAs($user)->get('/transaksi?search=Kopi+Susu');
+
+        $response->assertStatus(200);
+        $response->assertSee('Kopi Susu Gula Aren Spesial');
+        $response->assertDontSee('Makan Bakso Solo');
+        $response->assertSee('1 filter aktif');
+    }
+
+    public function test_mobile_transaction_feed_renders_two_line_layout_properly(): void
+    {
+        $user = User::factory()->create();
+        $pocket = Pocket::factory()->create([
+            'user_id' => $user->id,
+            'name' => 'Kas & Dompet Tunai Panjang Sekali',
+        ]);
+
+        Transaction::factory()->create([
+            'user_id' => $user->id,
+            'pocket_id' => $pocket->id,
+            'type' => 'out',
+            'amount' => 35000,
+            'description' => 'Makan siang nasi padang komplit rendang',
+        ]);
+
+        $response = $this->actingAs($user)->get('/transaksi');
+
+        $response->assertStatus(200);
+        $response->assertSee('Makan siang nasi padang komplit rendang');
+        $response->assertSee('Kas &amp; Dompet Tunai Panjang Sekali', false);
+        $response->assertSee('- Rp 35.000');
+    }
 }

@@ -1,13 +1,26 @@
 @import 'tailwindcss';
-@import '@fortawesome/fontawesome-free/css/all.min.css';
 
 @source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
 @source '../../storage/framework/views/*.php';
 @source '../views/**/*.blade.php';
 
 @theme {
-    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
-        'Segoe UI Symbol', 'Noto Color Emoji';
+    --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+
+    /* Primary Brand Theme: Tailwind Indigo-900 */
+    --color-primary-50: oklch(96.2% 0.018 272.314);
+    --color-primary-100: oklch(93% 0.034 272.788);
+    --color-primary-200: oklch(87% 0.065 274.039);
+    --color-primary-300: oklch(78.5% 0.115 274.713);
+    --color-primary-400: oklch(67.3% 0.182 276.935);
+    --color-primary-500: oklch(58.5% 0.233 277.117);
+    --color-primary-600: oklch(51.1% 0.262 276.966);
+    --color-primary-700: oklch(45.7% 0.24 277.023);
+    --color-primary-800: oklch(39.8% 0.195 277.366);
+    --color-primary-900: oklch(35.9% 0.144 278.697);
+    --color-primary-950: oklch(25.7% 0.09 281.288);
+
+    --color-canvas: #f8fafc;
 }
 
 /* Custom soft neutral scrollbar */
@@ -26,3 +39,139 @@
     background: #a1a1aa;
 }
 
+/* Universal desktop cursor pointer & interaction feedback */
+button,
+[role="button"],
+a,
+input[type="submit"],
+input[type="button"],
+input[type="reset"],
+select,
+.cursor-pointer,
+.touch-target,
+.touch-target-sm,
+.preset-chip,
+label:has(input[type="radio"]),
+label:has(input[type="checkbox"]) {
+    cursor: pointer;
+}
+
+.font-mono-numbers {
+    font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, monospace;
+    font-variant-numeric: tabular-nums;
+}
+
+.touch-press {
+    transition: transform 0.12s ease-in-out;
+}
+.touch-press:active {
+    transform: scale(0.97);
+}
+
+/* Mobile Touch & Natural Theme Utilities */
+.touch-target {
+    min-height: 44px;
+    min-width: 44px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    touch-action: manipulation;
+}
+
+.touch-target-sm {
+    min-height: 40px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    user-select: none;
+    touch-action: manipulation;
+}
+
+@keyframes slideUpSheet {
+    from {
+        transform: translateY(100%);
+        opacity: 0;
+    }
+    to {
+        transform: translateY(0);
+        opacity: 1;
+    }
+}
+
+.animate-sheet-up {
+    animation: slideUpSheet 0.28s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+/* Brand Primary Button (Tailwind Indigo-900) */
+.btn-primary, .btn-brand-primary, .btn-pine-primary {
+    background-color: oklch(35.9% 0.144 278.697);
+    color: #ffffff;
+    box-shadow: 0 1px 2px 0 rgba(49, 46, 129, 0.2);
+    transition: all 0.15s ease-in-out;
+}
+.btn-primary:hover, .btn-brand-primary:hover, .btn-pine-primary:hover {
+    background-color: oklch(39.8% 0.195 277.366);
+}
+.btn-primary:active, .btn-brand-primary:active, .btn-pine-primary:active {
+    background-color: oklch(25.7% 0.09 281.288);
+    transform: scale(0.98);
+}
+
+/* Brand Secondary Button (Soft Indigo Tint) */
+.btn-secondary, .btn-brand-secondary, .btn-pine-secondary {
+    background-color: oklch(96.2% 0.018 272.314);
+    color: oklch(35.9% 0.144 278.697);
+    border: 1px solid oklch(87% 0.065 274.039);
+    transition: all 0.15s ease-in-out;
+}
+.btn-secondary:hover, .btn-brand-secondary:hover, .btn-pine-secondary:hover {
+    background-color: oklch(93% 0.034 272.788);
+}
+.btn-secondary:active, .btn-brand-secondary:active, .btn-pine-secondary:active {
+    transform: scale(0.98);
+}
+
+.card-soft {
+    background-color: #ffffff;
+    border: 1px solid #e5e7eb;
+    border-radius: 0.875rem; /* rounded-xl (14px) - balanced & comfortable */
+    box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.03);
+}
+
+.glass-header {
+    background-color: rgba(255, 255, 255, 0.92);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.bottom-nav-mobile {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 40;
+    background-color: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid #e5e7eb;
+    padding-top: 0.625rem;
+    padding-bottom: calc(env(safe-area-inset-bottom, 0px) + 0.875rem);
+}
+
+.simulator-bottom-nav {
+    position: sticky;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 30;
+    background-color: rgba(255, 255, 255, 0.96);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid #e5e7eb;
+    padding-top: 0.625rem;
+    padding-bottom: 0.875rem;
+}
