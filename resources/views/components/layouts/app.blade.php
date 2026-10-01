@@ -108,17 +108,17 @@
             <!-- Tab 1: Dashboard -->
             <a href="{{ route('dashboard') }}" class="flex flex-col items-center gap-1 text-[10.5px] transition cursor-pointer touch-press {{ request()->routeIs('dashboard') ? 'text-[#312E81] font-bold' : 'text-zinc-500 hover:text-zinc-800 font-medium' }}">
                 <div class="w-8 h-8 rounded-xl flex items-center justify-center text-xs {{ request()->routeIs('dashboard') ? 'bg-[#EEF2FF]' : '' }}">
-                    <i class="fa-regular xx fa-gauge"></i>
+                    <i class="fa-light xx {{ request()->routeIs('dashboard') ? 'text-lg' : 'text-2xl' }} fa-gauge"></i>
                 </div>
-                <span class="tracking-tight">Beranda</span>
+                <span class="tracking-tight">{{ request()->routeIs('dashboard') ? 'Dashboard' : '' }}</span>
             </a>
 
             <!-- Tab 2: Kantong -->
             <a href="{{ route('pockets.index') }}" class="flex flex-col items-center gap-1 text-[10.5px] transition cursor-pointer touch-press {{ request()->routeIs('pockets.*') ? 'text-[#312E81] font-bold' : 'text-zinc-500 hover:text-zinc-800 font-medium' }}">
                 <div class="w-8 h-8 rounded-xl flex items-center justify-center text-xs {{ request()->routeIs('pockets.*') ? 'bg-[#EEF2FF]' : '' }}">
-                    <i class="fa-regular xx fa-boxes-stacked"></i>
+                    <i class="fa-light xx {{ request()->routeIs('pockets.*') ? 'text-lg' : 'text-2xl' }} fa-boxes-stacked"></i>
                 </div>
-                <span class="tracking-tight">Kantong</span>
+                <span class="tracking-tight">{{ request()->routeIs('pockets.*') ? 'Kantong' : '' }}</span>
             </a>
 
             <!-- Center Floating Thumb Action: Catat Cepat (+) -->
@@ -127,16 +127,16 @@
                         onclick="document.getElementById('quick-transaction-modal')?.classList.remove('hidden')"
                         class="touch-target w-12 h-12 rounded-2xl btn-primary text-white shadow-lg shadow-indigo-900/25 flex items-center justify-center text-base hover:scale-105 transition-all touch-press cursor-pointer"
                         title="Catat Cepat">
-                    <i class="fa-regular xx fa-plus text-sm"></i>
+                    <i class="fa-light xx text-lg fa-plus"></i>
                 </button>
             </div>
 
             <!-- Tab 3: Riwayat Transaksi -->
             <a href="{{ route('transactions.index') }}" class="flex flex-col items-center gap-1 text-[10.5px] transition cursor-pointer touch-press {{ request()->routeIs('transactions.*') ? 'text-[#312E81] font-bold' : 'text-zinc-500 hover:text-zinc-800 font-medium' }}">
                 <div class="w-8 h-8 rounded-xl flex items-center justify-center text-xs {{ request()->routeIs('transactions.*') ? 'bg-[#EEF2FF]' : '' }}">
-                    <i class="fa-regular xx fa-receipt"></i>
+                    <i class="fa-light xx {{ request()->routeIs('transactions.*') ? 'text-lg' : 'text-2xl' }} fa-receipt"></i>
                 </div>
-                <span class="tracking-tight">Riwayat</span>
+                <span class="tracking-tight">{{ request()->routeIs('transactions.*') ? 'Riwayat' : '' }}</span>
             </a>
 
             <!-- Tab 4: Keluar Akun -->
@@ -147,9 +147,9 @@
                         data-confirm-title="Keluar Akun"
                         class="flex flex-col items-center gap-1 text-[10.5px] text-zinc-500 hover:text-rose-600 font-medium transition cursor-pointer touch-press">
                     <div class="w-8 h-8 rounded-xl flex items-center justify-center text-xs">
-                        <i class="fa-regular xx fa-arrow-right-from-bracket"></i>
+                        <i class="fa-light xx text-2xl fa-arrow-right-from-bracket"></i>
                     </div>
-                    <span class="tracking-tight">Keluar</span>
+                    {{-- <span class="tracking-tight">Keluar</span> --}}
                 </button>
             </form>
         </nav>

@@ -85,4 +85,17 @@ class AuthTest extends TestCase
         $this->assertGuest();
         $response->assertRedirect(route('login'));
     }
+
+    public function test_login_page_renders_https_assets_when_behind_https_proxy(): void
+    {
+        $response = $this->withHeaders([
+            'X-Forwarded-Proto' => 'https',
+            'X-Forwarded-Port' => '443',
+        ])->get('https://budget.akuonline.my.id/login');
+
+        $response->assertStatus(200);
+        $response->assertSee('action="https://budget.akuonline.my.id/login"', false);
+        $response->assertSee('https://budget.akuonline.my.id/assets/vendor/notiflix/notiflix.min.js', false);
+        $response->assertDontSee('http://budget.akuonline.my.id', false);
+    }
 }
